@@ -1,0 +1,9 @@
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    background: url('../bg/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin:0; padding:0;
+    overflow-x: hidden;
+}
+/* Add rest of your styles here (copy from your HTML <style>) */

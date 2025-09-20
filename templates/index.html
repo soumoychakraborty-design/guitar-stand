@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guitar Stand</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+<h1 style="text-align:center;">Guitar Stand</h1>
+<h1 style="text-align:center;">A place to learn Guitar, Ukulele and music</h1>
+
+<div style="position:fixed; top:20px; left:20px; z-index:1000;">
+    <span class="about-btn" onclick="openAbout()">About Me</span>
+</div>
+
+<div id="mainContentWrapper" style="text-align:center; margin:20px 0;">
+    <div id="logoSignature" style="font-size:36px;font-weight:bold;color:white;text-shadow:2px 2px 6px rgba(0,0,0,0.8);"></div>
+    <div id="tilesContainer" class="block-container" style="display:none;">
+        <div class="block-tile" onclick="switchContent('know_chords')">Know your Chords ▼</div>
+        <div class="block-tile" onclick="switchContent('theory')">Theory @Glance ▼</div>
+    </div>
+</div>
+
+<div class="page-description">
+    <p>Welcome to <b>Guitar Stand !</b><br>Interactive platform for learning chords, modes, and music theory.</p>
+    <button onclick="showTiles()">Quick Tools</button>
+</div>
+
+<div class="content" id="know_chords">
+    <div class="input-container">
+        <form method="post">
+            <input type="text" name="chord" placeholder="eg: Major: Eb/EbM; Minor: Ebm">
+            <button type="submit">Analyze</button>
+        </form>
+    </div>
+
+    {% if error %}<div class="error-box">{{ error }}</div>{% endif %}
+    {% if chord and not error %}
+        <h2 class="info-box">Chord: {{ chord }}</h2>
+        <p class="info-box">Notes in chord: {{ notes }}</p>
+        <div class="tile" onclick="toggleContent('modes')">{{ chord }} as part of different Modes ▼</div>
+        <div class="content content-inner" id="modes">
+            <div class="vertical-list">
+            {% for mode_name, mode_notes, other_triads in modes %}
+                <div class="tile" onclick="toggleContent('mode_{{ loop.index }}')">{{ mode_name }}</div>
+                <div class="content content-inner" id="mode_{{ loop.index }}">
+                    <b>Notes in scale:</b>
+                    <div class="horizontal-list">{% for n in mode_notes %}<span>{{ n }}</span>{% endfor %}</div>
+                    <b>Other chords apart from {{ chord }}:</b>
+                    <div class="vertical-list">{% for triad in other_triads %}<span>{{ triad }}</span>{% endfor %}</div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="tile" onclick="toggleContent('inversions')">{{ chord }} Inversions ▼</div>
+        <div class="content content-inner" id="inversions">
+            <div class="vertical-list">
+                <span>1st inversion: {{ notes_list[1:] + [notes_list[0]] }}</span>
+                <span>2nd inversion: {{ notes_list[2:] + notes_list[:2] }}</span>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div class="content" id="theory">
+    <h3>Theory at a Glance</h3>
+    <p><b>12 Notes:</b> {{ NOTES }}</p>
+</div>
+
+<script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+
+<div id="aboutPanel" class="about-panel">
+    <span class="close-btn" onclick="closeAbout()">&times;</span>
+    <p><b>Instructor:</b> Soumoy Chakraborty</p>
+</div>
+
+<div class="copyright-footer">
+    &copy; coach. All Rights Reserved.
+</div>
+</body>
+</html>
